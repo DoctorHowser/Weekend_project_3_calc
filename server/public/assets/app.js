@@ -7,16 +7,22 @@ var operatorClicked = false;
 var secondNumeral = false;
 var numberReturned = false;
 
+//Init!
 $(document).ready(function () {
-    makeKeys();
-    clickInit();
-    operatorInit();
-    equalsInit();
-    clearInit();
+    initCalculator();
 
 });
 
-function clickInit() {
+
+function initCalculator(){
+    makeKeys();
+    numberInit();
+    operatorInit();
+    equalsInit();
+    clearInit();
+}
+
+function numberInit() {
     $('#numbers').on('click', '.number', clickNumber);
 }
 function clearInit(){
@@ -27,7 +33,17 @@ function operatorInit() {
     $('#controls').on('click', '.operator', clickOperator);
 }
 function equalsInit() {
-    $('#equals').on('click', equalsOperator);
+    $('#equals').on('click', clickEquals);
+}
+
+//Click Logic
+
+function resetAll(){
+    clearDisplay();
+    operatorClicked = false;
+    secondNumeral = false;
+    numberReturned = false;
+
 }
 
 function clickNumber(){
@@ -44,6 +60,66 @@ function clickNumber(){
     var numeral = $(this).text();
     writeDisplay(numeral);
 }
+
+function clickOperator(){
+
+    calculation.val1 = $('#display').text();
+    var operator = $(this).text();
+
+    if (numberReturned == true){
+        resetAll();
+    }
+
+    //Give Object type of button clicked
+    assignOperator(operator);
+    clearDisplay();
+    writeDisplay((calculation.val1 + operator));
+}
+//operator assignment
+function assignOperator(operator) {
+    switch (operator) {
+        case "+":
+            calculation.type = "add";
+            operatorClicked = true;
+            break;
+        case "-":
+            calculation.type = "sub";
+            operatorClicked = true;
+            break;
+        case "*":
+            calculation.type = "mlt";
+            operatorClicked = true;
+            break;
+        case "/":
+            calculation.type = "div";
+            operatorClicked = true;
+            break;
+        case ".":
+            writeDisplay(".");
+            break;
+
+
+
+    }
+}
+
+function clickEquals() {
+    if (numberReturned == true) {
+        calculation.val1 = $('#display').text();
+        clearDisplay();
+        callServer(calculation);
+    } else {
+
+        calculation.val2 = $('#display').text();
+        console.log(calculation);
+        clearDisplay();
+        callServer(calculation);
+    }
+
+}
+
+
+//server calls after equals click
 function callServer(thiscalc) {
     switch (thiscalc.type) {
         case "add":
@@ -112,86 +188,19 @@ function callServer(thiscalc) {
 
 
 }
+
+//DOM Functions
 function writeDisplay(toWrite){
     $('#display').append(toWrite);
 }
 
-
-
-function equalsOperator() {
-    if (numberReturned == true) {
-        calculation.val1 = $('#display').text();
-        clearDisplay();
-        callServer(calculation);
-    } else {
-
-    calculation.val2 = $('#display').text();
-    console.log(calculation);
-    clearDisplay();
-    callServer(calculation);
-    }
-
-}
-
-function clickOperator(){
-
-    calculation.val1 = $('#display').text();
-    var operator = $(this).text();
-
-    if (numberReturned == true){
-        resetAll();
-    }
-
-    //Give Object type of button clicked
-    assignOperator(operator);
-    clearDisplay();
-    writeDisplay((calculation.val1 + operator));
-    }
-
-function resetAll(){
-    clearDisplay();
-    operatorClicked = false;
-    secondNumeral = false;
-    numberReturned = false;
-
-}
 function clearDisplay(){
     $('#display').empty();
 }
 
-function assignOperator(operator) {
-    switch (operator) {
-        case "+":
-            calculation.type = "add";
-            operatorClicked = true;
-            break;
-        case "-":
-            calculation.type = "sub";
-            operatorClicked = true;
-            break;
-        case "*":
-            calculation.type = "mlt";
-            operatorClicked = true;
-            break;
-        case "/":
-            calculation.type = "div";
-            operatorClicked = true;
-            break;
-        case ".":
-            writeDisplay(".");
-            break;
-
-
-
-    }
-}
-
-
-
-
 function makeKeys(){
-   makeNumbers();
-   makeOperators();
+    makeNumbers();
+    makeOperators();
 
 }
 function makeNumbers(){
@@ -207,3 +216,14 @@ function makeOperators(){
         $('#controls').append(el);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
