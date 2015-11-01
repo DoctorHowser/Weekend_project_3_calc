@@ -53,8 +53,10 @@ function resetAll(){
 
 function clickNumber(){
     //checks to see if this was a returned number, if so, clear display before entering new number instead of just appending
-    checkNumberReturned()
-    } else if (operatorClicked == true ){
+    checkNumberReturned();
+
+    //if 1st numnber and operator have been clicked, clears display and allows for new numbers
+    if (operatorClicked == true ){
         clearDisplay();
         operatorClicked = false;
         secondNumeral = true;
