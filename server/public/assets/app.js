@@ -21,7 +21,7 @@ function initCalculator(){
     equalsInit();
     clearInit();
 }
-
+//click handlers
 function numberInit() {
     $('#numbers').on('click', '.number', clickNumber);
 }
@@ -36,7 +36,12 @@ function equalsInit() {
     $('#equals').on('click', clickEquals);
 }
 
-//Click Logic
+//click logic
+function checkNumberReturned() {
+    if (numberReturned == true){
+        resetAll();
+    }
+}
 
 function resetAll(){
     clearDisplay();
@@ -47,10 +52,8 @@ function resetAll(){
 }
 
 function clickNumber(){
-
-    if (numberReturned == true){
-        clearDisplay();
-        resetAll();
+    //checks to see if this was a returned number, if so, clear display before entering new number instead of just appending
+    checkNumberReturned()
     } else if (operatorClicked == true ){
         clearDisplay();
         operatorClicked = false;
@@ -62,15 +65,13 @@ function clickNumber(){
 }
 
 function clickOperator(){
-
+    //grab 1st number from display, assign to object
     calculation.val1 = $('#display').text();
     var operator = $(this).text();
 
-    if (numberReturned == true){
-        resetAll();
-    }
+    checkNumberReturned();
 
-    //Give Object type of button clicked
+    //Give Object type of operator clicked
     assignOperator(operator);
     clearDisplay();
     writeDisplay((calculation.val1 + operator));
@@ -104,6 +105,7 @@ function assignOperator(operator) {
 }
 
 function clickEquals() {
+    //allows to keep hitting equals to keep most recent operator and second number. ie 20/5 returns 4, hitting equals makes 4/5, etc.
     if (numberReturned == true) {
         calculation.val1 = $('#display').text();
         clearDisplay();
@@ -119,7 +121,7 @@ function clickEquals() {
 }
 
 
-//server calls after equals click
+//server calls after equals click by type of calculation
 function callServer(thiscalc) {
     switch (thiscalc.type) {
         case "add":
