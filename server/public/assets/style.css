@@ -11,13 +11,18 @@
 }
 .operator {
     width: 50%;
-    height: auto;
+    height: 33.33%;
 
 }
 #equals {
     width: 100%;
+    margin: 20px 0 0 0;
 
 }
+#controls{
+    height: 244px;
+}
+
 #controls:last-child {
     width: 100%
 }
